@@ -1,11 +1,12 @@
 const { GcsFileUpload } = require("gcs-file-upload");
 const requireLogin = require("../middlewares/requireLogin");
 const path = require("path");
+const keys = require("../config/keys");
 const fs = require("fs");
 
 const myBucket = new GcsFileUpload(
   {
-    keyFilename: path.join(__dirname, "../emailcamp-271520-a4d8e6860dcc.json"),
+    keyFilename: keys.gcsKeys,
     projectId: "emailcamp-271520",
   },
   "images_emailcamp"
