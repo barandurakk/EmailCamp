@@ -43,7 +43,7 @@ if (process.env.NODE_ENV === "production") {
 
   //Express gelen route'u tanımazsa index.html sayfasını cevap olarak göndersin diye.
   const path = require("path");
-  app.get("*", (res, res) => {
+  app.get("*", (req, res) => {
     res.sendFile(path.resolve(__dirname, "client", "build", "index.html"));
   });
 }
