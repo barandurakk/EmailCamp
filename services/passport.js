@@ -12,7 +12,7 @@ passport.serializeUser((user, done) => {
 
 passport.deserializeUser((id, done) => {
   //id serialize'dan atadıgımız user.id buradaki id parametresine denk geliyor.
-  User.findById(id).then(user => {
+  User.findById(id).then((user) => {
     done(null, user);
   });
 });
@@ -23,24 +23,23 @@ passport.use(
       clientID: keys.googleClientID,
       clientSecret: keys.googleClientSecret,
       callbackURL: "/auth/google/callback",
-      proxy: true //google'ın proxy'e guvenmesi için.
+      proxy: true, //google'ın proxy'e guvenmesi için.
     },
-    (accessToken, refreshToken, profile, done) => {
-      User.findOne({ googleId: profile.id }).then(user => {
-        if (user) {
-          //halihazırda böyle bir kullanıcı var
-          done(null, user); //1.error 2.modelinstance
-        } else {
-          // yeni kullanıcı yarat.
-          new User({
-            googleId: profile.id
-          })
-            .save()
-            .then(user => {
-              done(null, user);
-            });
-        }
-      });
+    async (accessToken, refreshToken, profile, done) => {
+      const existingUser = await User.findOne({ googleId: profile.id });
+
+      if (existingUser) {
+        //halihazırda böyle bir kullanıcı var
+        return done(null, existingUser); //1.error 2.modelinstance
+      }
+
+      // yeni kullanıcı yarat.
+      const user = await new User({
+        googleId: profile.id,
+        displayName: profile.displayName,
+        pictureUrl: profile._json.picture,
+      }).save();
+      done(null, user);
     }
   )
 );
