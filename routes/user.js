@@ -4,16 +4,19 @@ const path = require("path");
 const keys = require("../config/keys");
 const fs = require("fs");
 
-const myBucket = new GcsFileUpload(
-  {
-    keyFilename: keys.gcsKeys,
-    projectId: "emailcamp-271520",
-  },
-  "images_emailcamp"
-);
-
 //upload logic
 const uploadImage = (file) => {
+  const myBucket = new GcsFileUpload(
+    {
+      keyFilename:
+        process.env.NODE_ENV === "production"
+          ? process.env.GCS_KEY
+          : path.join(__dirname, "../emailcamp-271520-a4d8e6860dcc.json"),
+      projectId: "emailcamp-271520",
+    },
+    "images_emailcamp"
+  );
+
   const fileMetaData = {
     originalname: `${Math.round(Math.random() * 10000)}.${file.originalname}`,
     buffer: file.buffer,
