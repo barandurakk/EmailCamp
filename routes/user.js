@@ -1,8 +1,6 @@
 const { GcsFileUpload } = require("gcs-file-upload");
 const requireLogin = require("../middlewares/requireLogin");
 const path = require("path");
-const keys = require("../config/keys");
-const fs = require("fs");
 
 //upload logic
 const uploadImage = (file, userId) => {
