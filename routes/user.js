@@ -8,7 +8,7 @@ const uploadImage = (file, userId) => {
     {
       keyFilename:
         process.env.NODE_ENV === "production"
-          ? JSON.parse(process.env.GCS_KEY_FILE)
+          ? process.env.GOOGLE_APPLICATION_CREDENTIALS
           : path.join(__dirname, "../emailcamp-271520-a4d8e6860dcc.json"),
       projectId: "emailcamp-271520",
     },
