@@ -5,7 +5,7 @@ const keys = require("../config/keys");
 const fs = require("fs");
 
 //upload logic
-const uploadImage = (file) => {
+const uploadImage = (file, userId) => {
   const myBucket = new GcsFileUpload(
     {
       keyFilename:
@@ -14,12 +14,15 @@ const uploadImage = (file) => {
           : path.join(__dirname, "../emailcamp-271520-a4d8e6860dcc.json"),
       projectId: "emailcamp-271520",
     },
-    "images_emailcamp"
+    `images_emailcamp`
   );
 
+  const setFileName = `${Math.round(Math.random() * 10000)}.${file.originalname}`;
+
   const fileMetaData = {
-    originalname: `${Math.round(Math.random() * 10000)}.${file.originalname}`,
+    originalname: setFileName,
     buffer: file.buffer,
+    resumable: true,
   };
 
   myBucket.uploadFile(fileMetaData).then((data) => {});
@@ -32,7 +35,7 @@ module.exports = (app) => {
     console.log(req.file);
 
     const myFile = req.file;
-    const imageUrl = await uploadImage(myFile); //url burada
+    const imageUrl = await uploadImage(myFile, req.user.googleId); //url burada
 
     if (imageUrl) {
       req.user.pictureUrl = imageUrl;
