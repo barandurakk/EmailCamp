@@ -10,7 +10,7 @@ const uploadImage = (file, userId) => {
     {
       keyFilename:
         process.env.NODE_ENV === "production"
-          ? process.env.GCS_KEY
+          ? process.env.GCS_KEY_FILE
           : path.join(__dirname, "../emailcamp-271520-a4d8e6860dcc.json"),
       projectId: "emailcamp-271520",
     },
