@@ -6,6 +6,7 @@ const keys = require("./config/keys");
 const bodyParser = require("body-parser");
 const multer = require("multer");
 require("./models/User");
+require("./models/Survey");
 require("./services/passport");
 
 const multerMid = multer({
@@ -35,6 +36,7 @@ app.use(multerMid.single("file")); //tek resim upload için middleware
 require("./routes/auth")(app);
 require("./routes/billingRoutes")(app);
 require("./routes/user")(app);
+require("./routes/surveyRoutes")(app);
 
 //bu logic temel olarak productionda çalışan express serverimizin cevap olarak client serverimizi (react app) tanıması ve cevap gönderebilmesi için.
 if (process.env.NODE_ENV === "production") {

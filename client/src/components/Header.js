@@ -59,7 +59,12 @@ class Header extends Component {
                   src={auth.pictureUrl}
                   alt=""
                   className="circle responsive-img"
-                  style={{ width: 50, verticalAlign: "middle", paddingRight: 10 }}
+                  style={{
+                    width: "50px",
+                    height: "50px",
+                    verticalAlign: "middle",
+                    marginRight: 10,
+                  }}
                 />
 
                 {auth.displayName}
@@ -79,7 +84,7 @@ class Header extends Component {
       <Fragment>
         <nav>
           <div className="nav-wrapper blue-grey">
-            <Link to={auth ? "/anketler" : "/"} className="left brand-logo">
+            <Link to={auth ? "/panel" : "/"} className="left brand-logo">
               EmailCamp
             </Link>
 

@@ -5,12 +5,11 @@ import { connect } from "react-redux";
 import Header from "./Header";
 import Landing from "./Landing";
 import UserProfile from "./UserProfile";
+import Dashboard from "./Dashboard";
+import NewSurvey from "./Survey/NewSurvey.js";
 
 //actions
 import { fetchUser } from "../actions/index";
-
-const Dashboard = () => <h2>Panel(Anketler)</h2>;
-const SurveyNew = () => <h2>Yeni Anket</h2>;
 
 class App extends Component {
   componentDidMount() {
@@ -25,8 +24,8 @@ class App extends Component {
         <div className="container">
           <Switch>
             <Route exact path="/" component={Landing} />
-            <Route exact path="/anketler" component={Dashboard} />
-            <Route exact path="/anketler/yeni" component={SurveyNew} />
+            <Route exact path="/panel" component={Dashboard} />
+            <Route exact path="/panel/yeni" component={NewSurvey} />
             <Route exact path="/profile" component={UserProfile} />
           </Switch>
         </div>
