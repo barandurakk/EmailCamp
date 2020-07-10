@@ -7,6 +7,26 @@ import validateEmails from "../../utils/validateEmails";
 
 import CSVReader from "react-csv-reader";
 
+//material ui
+import withStyles from "@material-ui/styles/withStyles";
+import { Button } from "@material-ui/core";
+
+const styles = {
+  formActionWrapper: {
+    position: "fixed",
+    width: "100%",
+    bottom: "0px",
+    height: "100px",
+    backgroundColor: "#80d8ff",
+    display: "flex",
+    alignContent: "middle",
+    justifyContent: "space-between",
+  },
+  actionButtons: {
+    width: "150px",
+  },
+};
+
 class FormSurvey extends React.Component {
   handleCsvFile(data) {
     let recipientTempList = [];
@@ -26,16 +46,48 @@ class FormSurvey extends React.Component {
   }
 
   renderFields() {
+    const { classes } = this.props;
     return (
       <div>
-        <Field type="text" name="title" label="Anket Başlığı" component={SurveyField} />
-        <Field type="text" name="subject" label="Konu" component={SurveyField} />
-        <Field type="text" name="body" label="Email İçeriği" component={SurveyField} />
+        <Field
+          type="text"
+          name="title"
+          label="Anket Başlığı"
+          component={SurveyField}
+          variant="outlined"
+          multiline={false}
+        />
+        <Field
+          type="text"
+          name="from"
+          label="Kimden"
+          component={SurveyField}
+          variant="outlined"
+          multiline={false}
+        />
+        <Field
+          type="text"
+          name="subject"
+          label="Konu"
+          component={SurveyField}
+          variant="outlined"
+          multiline={false}
+        />
+        <Field
+          type="text"
+          name="body"
+          label="Email İçeriği"
+          component={SurveyField}
+          multiline={true}
+          variant="outlined"
+        />
         <Field
           type="text"
           name="recipients"
           label="Alıcı Listesi (Virgülle Ayrılmış)"
           component={SurveyField}
+          multiline={true}
+          variant="outlined"
         />
         <CSVReader onFileLoaded={(data) => this.handleCsvFile(data)} />
       </div>
@@ -43,12 +95,30 @@ class FormSurvey extends React.Component {
   }
 
   render() {
+    const { classes } = this.props;
     return (
       <div>
         <form onSubmit={this.props.handleSubmit(this.props.onSubmit)}>
           {this.renderFields()}
-          <Link to="/panel">İptal</Link>
-          <button type="submit">Sonraki</button>
+          <div className={classes.formActionWrapper}>
+            <Button
+              className={classes.actionButtons}
+              variant="contained"
+              color="primary"
+              component={Link}
+              to="/panel"
+            >
+              İptal
+            </Button>
+            <Button
+              className={classes.actionButtons}
+              type="submit"
+              variant="contained"
+              color="primary"
+            >
+              Sonraki
+            </Button>
+          </div>
         </form>
       </div>
     );
@@ -80,6 +150,12 @@ function validate(values) {
     errors.body = "Mail içeriği 10000 karakterden fazla olamaz!";
   }
 
+  //from
+  errors.from = validateEmails(values.from || "");
+  if (!values.from) {
+    errors.from = "Kimden kısmı boş olamaz!";
+  }
+
   //Recipients
   errors.recipients = validateEmails(values.recipients || "");
   if (!values.recipients) {
@@ -94,4 +170,4 @@ export default reduxForm({
   form: "surveyForm",
   enableReinitialize: true,
   destroyOnUnmount: false,
-})(FormSurvey);
+})(withStyles(styles)(FormSurvey));

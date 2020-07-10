@@ -1,99 +1,147 @@
-import React, { Component, Fragment } from "react";
-import "materialize-css";
-import { Button, Modal } from "react-materialize";
+import React, { Component } from "react";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
-import "../css/header.css";
+
+//material ui
+import withStyles from "@material-ui/core/styles/withStyles";
+import AppBar from "@material-ui/core/AppBar";
+import Toolbar from "@material-ui/core/Toolbar";
+
+import Typography from "@material-ui/core/Typography";
+import Dialog from "@material-ui/core/Dialog";
+import DialogContent from "@material-ui/core/DialogContent";
+import DialogActions from "@material-ui/core/DialogActions";
+import DialogTitle from "@material-ui/core/DialogTitle";
+import Button from "@material-ui/core/Button";
+import Avatar from "@material-ui/core/Avatar";
 
 import Payments from "./Payments";
 
+const style = {
+  root: {
+    display: "flex",
+    justifyContent: "space-between",
+  },
+  desktopButtons: {
+    display: "flex",
+    flexDirectioh: "row",
+  },
+  profileButton: {
+    display: "flex",
+  },
+  displayName: {
+    fontWeight: 600,
+    fontSize: 14,
+    color: "#fff",
+    marginLeft: 10,
+  },
+  creditButton: {
+    height: "40px",
+    padding: "5px 10px 5px 10px",
+    alignSelf: "center",
+  },
+  creditText: {
+    fontWeight: 600,
+    fontSize: 14,
+    color: "#fff",
+  },
+};
+
 class Header extends Component {
-  renderContent() {
-    const { auth } = this.props;
+  constructor(props) {
+    super(props);
+    this.state = {
+      open: false,
+    };
+  }
+
+  handleCreditOpen = () => {
+    this.setState({
+      open: true,
+    });
+  };
+
+  handleCreditClose = () => {
+    this.setState({
+      open: false,
+    });
+  };
+
+  renderCreditPopup = () => {
+    const { open } = this.state;
+
+    return (
+      <Dialog open={open} keepMounted onClose={this.handleCreditClose}>
+        <DialogTitle>{"Kredi Miktarını Seçiniz"}</DialogTitle>
+        <DialogContent>
+          <Payments />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={this.handleCreditClose} color="primary" variant="contained">
+            İptal
+          </Button>
+        </DialogActions>
+      </Dialog>
+    );
+  };
+
+  renderContent = () => {
+    const { auth, classes } = this.props;
     switch (auth) {
       case null:
-        return <li>Loading</li>;
+        return;
       case false:
         return (
-          <li>
-            <a href="/auth/google">Login With Google </a>
-          </li>
+          <div className={classes.desktopButtons}>
+            <Button
+              color="secondary"
+              variant="contained"
+              className={classes.signInButton}
+              href="/auth/google"
+            >
+              Google ile giriş yap
+            </Button>
+          </div>
         );
       default:
         return (
-          <Fragment>
-            <li>
-              <Modal
-                actions={[
-                  <Button flat modal="close" node="button" waves="green">
-                    İptal
-                  </Button>,
-                ]}
-                bottomSheet={false}
-                fixedFooter={false}
-                header="Kredi Miktarını Seçiniz"
-                id="Modal-0"
-                open={false}
-                options={{
-                  dismissible: true,
-                  endingTop: "10%",
-                  inDuration: 250,
-                  onCloseEnd: null,
-                  onCloseStart: null,
-                  onOpenEnd: null,
-                  onOpenStart: null,
-                  opacity: 0.5,
-                  outDuration: 250,
-                  preventScrolling: true,
-                  startingTop: "4%",
-                }}
-                trigger={<Button node="button">KREDİ YÜKLE</Button>}
+          <div className={classes.desktopButtons}>
+            <Button color="secondary" variant="contained" className={classes.creditButton}>
+              <Typography
+                variant="subtitle1"
+                className={classes.creditText}
+                onClick={this.handleCreditOpen}
               >
-                <Payments />
-              </Modal>
-            </li>
-            <li style={{ margin: "0 10px" }}>Kredi: {auth.credits}</li>
-            <li>
-              <a href="/profile">
-                <img
-                  src={auth.pictureUrl}
-                  alt=""
-                  className="circle responsive-img"
-                  style={{
-                    width: "50px",
-                    height: "50px",
-                    verticalAlign: "middle",
-                    marginRight: 10,
-                  }}
-                />
-
+                KREDİ YÜKLE
+              </Typography>
+            </Button>
+            {this.renderCreditPopup()}
+            <Button className={classes.profileButton} component={Link} to="/panel">
+              <Avatar alt="profile-picture" src={auth.pictureUrl} />
+              <Typography variant="subtitle1" className={classes.displayName} color="textSecondary">
                 {auth.displayName}
-              </a>
-            </li>
-            <li>
-              <a href="/api/logout">Çıkış Yap</a>
-            </li>
-          </Fragment>
+              </Typography>
+            </Button>
+            <Button href="/api/logout">
+              <Typography variant="subtitle1" className={classes.displayName} color="textSecondary">
+                Çıkış
+              </Typography>
+            </Button>
+          </div>
         );
     }
-  }
+  };
 
   render() {
-    const { auth } = this.props;
-    return (
-      <Fragment>
-        <nav>
-          <div className="nav-wrapper blue-grey">
-            <Link to={auth ? "/panel" : "/"} className="left brand-logo">
-              EmailCamp
-            </Link>
+    const { classes } = this.props;
 
-            <ul id="nav-mobile" className="right">
-              {this.renderContent()}
-            </ul>
-          </div>
-        </nav>
-      </Fragment>
+    return (
+      <AppBar position="static" color="primary">
+        <Toolbar className={classes.root}>
+          <Typography variant="h6">EmailCamp</Typography>
+          {this.renderContent()}
+        </Toolbar>
+      </AppBar>
     );
   }
 }
@@ -104,4 +152,4 @@ const mapStateToProps = (state) => {
   };
 };
 
-export default connect(mapStateToProps)(Header);
+export default connect(mapStateToProps)(withStyles(style)(Header));

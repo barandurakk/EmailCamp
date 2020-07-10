@@ -16,6 +16,19 @@ module.exports = (app) => {
     res.send(surveys);
   });
 
+  //get a Survey
+  app.get("/api/surveys/:surveyId", requireLogin, async (req, res) => {
+    const survey = await Survey.find({ _user: req.user.id, _id: req.params.surveyId });
+    console.log(survey);
+    if (survey) {
+      res.send(survey);
+    } else {
+      res
+        .status(404)
+        .send({ error: "Olmayan veya sahip olmadığınız bir ankete erişmeye çalışıyorsunuz." });
+    }
+  });
+
   //Thank you screen
   app.get("/api/surveys/:surveyId/:answer", (req, res) => {
     res.send("Geri dönüşünüz için teşekkürler!");
@@ -58,11 +71,14 @@ module.exports = (app) => {
 
   //post Survey to sendgrid and save survey to database
   app.post("/api/surveys", requireLogin, requireCredits, async (req, res) => {
-    const { title, subject, body, recipients } = req.body;
+    const { title, subject, body, recipients, from } = req.body;
+
+    console.log(from);
 
     const survey = new Survey({
       title,
       subject,
+      from,
       body,
       recipients: recipients.split(",").map((email) => ({ email: email.trim() })),
       _user: req.user.id,
