@@ -9,12 +9,17 @@ module.exports = (survey) => {
             <div style="text-align: center;">
                 <h3>Geri dönüşünüze ihtiyacımız var!</h3>
                 <p>${survey.body}</p>
-                <div>
-                    <a href="${keys.redirectDomain}/api/surveys/${survey.id}/yes">Evet</a>
-                </div>
-                <div>
-                    <a href="${keys.redirectDomain}/api/surveys/${survey.id}/no">Hayır</a>
-                </div>
+                ${survey.choices.map((choice) => {
+                  return `
+                    <div>
+                      <a href="${keys.redirectDomain}/api/surveys/${survey.id}/${choice.answer}">
+                        ${choice.answer}
+                      </a>
+                    </div>
+                  `;
+                })}
+               
+                
             </div>
         </body>
     </html>

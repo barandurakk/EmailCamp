@@ -83,6 +83,13 @@ class FormSurvey extends React.Component {
         />
         <Field
           type="text"
+          name="choices"
+          label="Seçenekler"
+          component={SurveyField}
+          variant="outlined"
+        />
+        <Field
+          type="text"
           name="recipients"
           label="Alıcı Listesi (Virgülle Ayrılmış)"
           component={SurveyField}

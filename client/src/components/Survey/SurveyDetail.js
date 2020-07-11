@@ -18,6 +18,7 @@ const styles = {};
 class SurveyDetail extends React.Component {
   renderContent = (survey) => {
     const { classes } = this.props;
+    console.log(survey);
     return (
       <Card>
         <CardActionArea>
@@ -31,12 +32,13 @@ class SurveyDetail extends React.Component {
           </CardContent>
         </CardActionArea>
         <CardActions>
-          <Button size="small" color="primary">
-            Evet: {survey.yes}
-          </Button>
-          <Button size="small" color="primary">
-            Hayır: {survey.no}
-          </Button>
+          {survey.choices.map((choice) => {
+            return (
+              <Button size="small" color="primary">
+                {choice.answer}: {choice.amount}
+              </Button>
+            );
+          })}
         </CardActions>
       </Card>
     );

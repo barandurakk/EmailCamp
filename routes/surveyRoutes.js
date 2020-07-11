@@ -56,9 +56,12 @@ module.exports = (app) => {
             recipients: {
               $elemMatch: { email: event.email, responded: false },
             },
+            choices: {
+              $elemMatch: { answer: event.answer },
+            },
           },
           {
-            $inc: { [event.answer]: 1 },
+            $inc: { "choices.$.amount": 1 },
             $set: { "recipients.$.responded": true },
             lastResponded: new Date(),
           }
@@ -71,7 +74,7 @@ module.exports = (app) => {
 
   //post Survey to sendgrid and save survey to database
   app.post("/api/surveys", requireLogin, requireCredits, async (req, res) => {
-    const { title, subject, body, recipients, from } = req.body;
+    const { title, subject, body, recipients, from, choices } = req.body;
 
     console.log(from);
 
@@ -81,6 +84,7 @@ module.exports = (app) => {
       from,
       body,
       recipients: recipients.split(",").map((email) => ({ email: email.trim() })),
+      choices: choices.split(",").map((choice) => ({ answer: choice })),
       _user: req.user.id,
       dateSent: Date.now(),
     });
