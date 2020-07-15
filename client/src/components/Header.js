@@ -39,6 +39,7 @@ const style = {
     height: "40px",
     padding: "5px 10px 5px 10px",
     alignSelf: "center",
+    marginRight: 15,
   },
   creditText: {
     fontWeight: 600,

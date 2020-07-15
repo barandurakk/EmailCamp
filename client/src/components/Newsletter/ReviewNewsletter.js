@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
 
 //action
-import { submitSurvey } from "../../actions/index";
+import { submitNewsletter } from "../../actions/index";
 
 //metarial-ui
 import withStyles from "@material-ui/styles/withStyles";
@@ -17,22 +17,12 @@ const styles = {
     maxHeight: "400px",
     overflowY: "scroll",
   },
-  formActionWrapper: {
-    position: "relative",
-    width: "100%",
-    top: "0px",
-    height: "50px",
-    backgroundColor: "#80d8ff",
-    display: "flex",
-    alignContent: "middle",
-    justifyContent: "space-between",
-    marginTop: 25,
-  },
 };
 
-class ReviewSurvey extends React.Component {
+class ReviewNewsletter extends React.Component {
   render() {
-    const { surveyFormValues, submitSurvey, history, classes } = this.props;
+    const { newsFormValues, submitNewsletter, history, classes } = this.props;
+    console.log(newsFormValues);
     return (
       <div>
         <Typography variant="h4" color="primary">
@@ -52,7 +42,7 @@ class ReviewSurvey extends React.Component {
             type="submit"
             variant="contained"
             color="primary"
-            onClick={() => submitSurvey(surveyFormValues, history)}
+            onClick={() => submitNewsletter(newsFormValues, history)}
           >
             Gönder
           </Button>
@@ -60,19 +50,22 @@ class ReviewSurvey extends React.Component {
         <div>
           <div>
             <label>Anket Başlığı</label>
-            <div>{surveyFormValues.title}</div>
+            <div>{newsFormValues.title}</div>
           </div>
           <div>
             <label>Konu</label>
-            <div>{surveyFormValues.subject}</div>
+            <div>{newsFormValues.subject}</div>
           </div>
           <div>
             <label>Email İçeriği</label>
-            <div>{surveyFormValues.body}</div>
+            <div
+              dangerouslySetInnerHTML={{ __html: newsFormValues.body }}
+              className={classes.previewDiv}
+            />
           </div>
           <div>
             <label>Alıcı Listesi</label>
-            <div>{surveyFormValues.recipients}</div>
+            <div>{newsFormValues.recipients}</div>
           </div>
         </div>
       </div>
@@ -82,10 +75,10 @@ class ReviewSurvey extends React.Component {
 
 const mapStateToProps = (state) => {
   return {
-    surveyFormValues: state.form.surveyForm.values,
+    newsFormValues: state.form.newsletterForm.values,
   };
 };
 
-export default connect(mapStateToProps, { submitSurvey })(
-  withRouter(withStyles(styles)(ReviewSurvey))
+export default connect(mapStateToProps, { submitNewsletter })(
+  withRouter(withStyles(styles)(ReviewNewsletter))
 );

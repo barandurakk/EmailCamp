@@ -7,6 +7,7 @@ const bodyParser = require("body-parser");
 const multer = require("multer");
 require("./models/User");
 require("./models/Survey");
+require("./models/Newsletter");
 require("./services/passport");
 
 const multerMid = multer({
@@ -37,6 +38,7 @@ require("./routes/auth")(app);
 require("./routes/billingRoutes")(app);
 require("./routes/user")(app);
 require("./routes/surveyRoutes")(app);
+require("./routes/newsletterRoutes")(app);
 
 //bu logic temel olarak productionda çalışan express serverimizin cevap olarak client serverimizi (react app) tanıması ve cevap gönderebilmesi için.
 if (process.env.NODE_ENV === "production") {

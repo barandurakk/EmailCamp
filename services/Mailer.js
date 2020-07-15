@@ -7,9 +7,9 @@ class Mailer extends helpers.classes.Mail {
   constructor({ subject, recipients, from }, content) {
     super();
 
-    this.setFrom("barandurak07@gmail.com"); // uses the EmailAddress.create method
+    this.setFrom("barandurak07@gmail.com");
     this.setSubject(subject);
-    this.addHtmlContent(content); // same as addContent, but more specific for HTML
+    this.addHtmlContent(content);
     this.setReplyTo(from);
 
     this.recipients = recipients.map(({ email }) => helpers.classes.EmailAddress.create(email));
@@ -18,7 +18,7 @@ class Mailer extends helpers.classes.Mail {
       clickTracking: { enable: true, enableText: true },
     });
 
-    this.addTo(this.recipients); // This uses the personalization method in the background
+    this.addTo(this.recipients);
   }
 
   formatAddresses(recipients) {
@@ -30,7 +30,7 @@ class Mailer extends helpers.classes.Mail {
   async send() {
     sgMail.setApiKey(keys.sendGridKey);
 
-    return await sgMail.send(this); // attach the current instance to be send out with SendGrid
+    return await sgMail.send(this);
   }
 }
 

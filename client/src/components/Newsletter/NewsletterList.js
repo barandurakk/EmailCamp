@@ -2,7 +2,7 @@ import React from "react";
 import { connect } from "react-redux";
 
 //action
-import { fetchSurveys, fetchASurvey } from "../../actions/index";
+import { fetchNewsletters, fetchANewsletter } from "../../actions/index";
 
 //metarial ui
 import { List, ListItem, Divider, Typography, IconButton, Tooltip } from "@material-ui/core";
@@ -33,10 +33,10 @@ const styles = {
   },
 };
 
-class SurveyList extends React.Component {
+class NewsletterList extends React.Component {
   constructor(props) {
     super(props);
-    this.props.fetchSurveys();
+    this.props.fetchNewsletters();
     this.state = {
       limit: 9,
       sortReturn: 1,
@@ -44,32 +44,30 @@ class SurveyList extends React.Component {
   }
 
   handleClick = (id) => {
-    this.props.fetchASurvey(id);
+    this.props.fetchANewsletter(id);
   };
 
-  renderSurveyList() {
-    const { surveys, classes } = this.props;
+  renderNewsletterList() {
+    const { newsletters, classes } = this.props;
 
-    return surveys
+    return newsletters
       .sort((a, b) => (a.dateSent > b.dateSent ? -this.state.sortReturn : this.state.sortReturn))
       .slice(this.state.limit - 9, this.state.limit)
-      .map((survey) => {
+      .map((newsletter) => {
         return (
-          <Fragment key={survey._id}>
+          <Fragment key={newsletter._id}>
             <ListItem
               button
               alignItems="flex-start"
               className={classes.listItemWrapper}
-              onClick={() => this.handleClick(survey._id)}
+              onClick={() => this.handleClick(newsletter._id)}
             >
               <Typography component="span" variant="h6" className={classes.listTitle}>
-                {survey.title}
+                {newsletter.title}
               </Typography>
 
               <Typography component="span" className={classes.listBody}>
-                Gönderilmiş: {new Date(survey.dateSent).toLocaleDateString()} <br />
-                Son Etkileşim:
-                {survey.lastResponded ? new Date(survey.lastResponded).toLocaleDateString() : "-"}
+                Gönderilmiş: {new Date(newsletter.dateSent).toLocaleDateString()} <br />
               </Typography>
             </ListItem>
             <Divider />
@@ -79,8 +77,8 @@ class SurveyList extends React.Component {
   }
 
   handleSkipButton = () => {
-    const { surveys } = this.props;
-    if (this.state.limit >= surveys.length) {
+    const { newsletters } = this.props;
+    if (this.state.limit >= newsletters.length) {
     } else {
       this.setState({
         limit: this.state.limit + 9,
@@ -106,8 +104,8 @@ class SurveyList extends React.Component {
   };
 
   render() {
-    const { surveys, classes } = this.props;
-    return surveys.length === 0 ? (
+    const { newsletters, classes } = this.props;
+    return newsletters.length === 0 ? (
       <div>Yükleniyor</div>
     ) : (
       <Fragment>
@@ -129,7 +127,7 @@ class SurveyList extends React.Component {
           </Tooltip>
         </div>
         <List component="nav" aria-label="main mailbox folders">
-          {this.renderSurveyList()}
+          {this.renderNewsletterList()}
         </List>
       </Fragment>
     );
@@ -138,10 +136,10 @@ class SurveyList extends React.Component {
 
 const mapStateToProps = (state) => {
   return {
-    surveys: state.surveys.surveyList,
+    newsletters: state.newsletters.newsletterList,
   };
 };
 
-export default connect(mapStateToProps, { fetchSurveys, fetchASurvey })(
-  withStyles(styles)(SurveyList)
+export default connect(mapStateToProps, { fetchNewsletters, fetchANewsletter })(
+  withStyles(styles)(NewsletterList)
 );

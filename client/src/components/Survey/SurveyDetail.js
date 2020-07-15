@@ -4,7 +4,6 @@ import { connect } from "react-redux";
 //metarial ui
 import withStyles from "@material-ui/styles/withStyles";
 import {
-  Grid,
   Card,
   CardActionArea,
   Typography,
@@ -17,8 +16,6 @@ const styles = {};
 
 class SurveyDetail extends React.Component {
   renderContent = (survey) => {
-    const { classes } = this.props;
-    console.log(survey);
     return (
       <Card>
         <CardActionArea>

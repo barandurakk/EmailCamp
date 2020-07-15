@@ -1,15 +1,16 @@
 import React from "react";
+
 import { Link } from "react-router-dom";
 import { reduxForm, Field } from "redux-form";
-
-import SurveyField from "./SurveyField";
+import FieldNewsletter from "./FieldNewsletter";
 import validateEmails from "../../utils/validateEmails";
 
 import CSVReader from "react-csv-reader";
+import TextEditor from "./TextEditor";
 
 //material ui
 import withStyles from "@material-ui/styles/withStyles";
-import { Button } from "@material-ui/core";
+import { Button, TextField, Typography } from "@material-ui/core";
 
 const styles = {
   formActionWrapper: {
@@ -26,9 +27,25 @@ const styles = {
   actionButtons: {
     width: "150px",
   },
+  bodyField: {
+    display: "none",
+  },
+  activeButton: {
+    backgroundColor: "#213e5b",
+    color: "#fff",
+  },
+  hideEditor: {
+    display: "none !important",
+  },
 };
 
-class FormSurvey extends React.Component {
+class FormNewsletter extends React.Component {
+  state = {
+    showEditor: true,
+    editorContent: "",
+    showPreview: false,
+  };
+
   handleCsvFile(data) {
     let recipientTempList = [];
     for (let x = 0; x < data.length; x++) {
@@ -46,14 +63,24 @@ class FormSurvey extends React.Component {
     this.props.change("recipients", recipientTempString);
   }
 
+  handleBodyValue = (editorValue) => {
+    this.props.change("body", editorValue);
+  };
+
+  handleHtmlFieldChange = (event) => {
+    this.props.change("body", event.target.value);
+  };
+
   renderFields() {
+    const { classes } = this.props;
+
     return (
       <div>
         <Field
           type="text"
           name="title"
           label="Anket Başlığı"
-          component={SurveyField}
+          component={FieldNewsletter}
           variant="outlined"
           multiline={false}
         />
@@ -61,7 +88,7 @@ class FormSurvey extends React.Component {
           type="text"
           name="from"
           label="Kimden"
-          component={SurveyField}
+          component={FieldNewsletter}
           variant="outlined"
           multiline={false}
         />
@@ -69,33 +96,50 @@ class FormSurvey extends React.Component {
           type="text"
           name="subject"
           label="Konu"
-          component={SurveyField}
+          component={FieldNewsletter}
           variant="outlined"
           multiline={false}
         />
-        <Field
-          type="text"
-          name="body"
-          label="Email İçeriği"
-          component={SurveyField}
-          multiline={true}
-          variant="outlined"
-        />
+        <Field type="text" name="body" label="İçerik" component={FieldNewsletter} />
+        <Typography variant="h6" color="primary">
+          Email Gövdesi
+        </Typography>
+        <Button
+          onClick={() => this.setState({ showEditor: true })}
+          className={this.state.showEditor ? classes.activeButton : ""}
+        >
+          Yazı
+        </Button>
+        <Button
+          onClick={() => this.setState({ showEditor: false })}
+          className={this.state.showEditor ? "" : classes.activeButton}
+        >
+          HTML
+        </Button>
 
-        <Field
-          type="text"
-          name="choices"
-          label="Cevap Seçenekleri (Virgülle Ayrılmış)"
-          component={SurveyField}
-          multiline={true}
-          variant="outlined"
-        />
+        <div>
+          <div className={this.state.showEditor ? "" : classes.hideEditor}>
+            <TextEditor editorValue={this.handleBodyValue} />
+          </div>
+
+          <br />
+          <div className={this.state.showEditor ? classes.hideEditor : ""}>
+            <TextField
+              multiline
+              variant="filled"
+              fullWidth
+              rows={10}
+              placeholder="Buraya html template yapıştırabilirsiniz"
+              onChange={(event) => this.handleHtmlFieldChange(event)}
+            />
+          </div>
+        </div>
 
         <Field
           type="text"
           name="recipients"
           label="Alıcı Listesi (Virgülle Ayrılmış)"
-          component={SurveyField}
+          component={FieldNewsletter}
           multiline={true}
           variant="outlined"
         />
@@ -105,10 +149,11 @@ class FormSurvey extends React.Component {
   }
 
   render() {
-    const { classes } = this.props;
+    const { classes, handleSubmit } = this.props;
+
     return (
       <div>
-        <form onSubmit={this.props.handleSubmit(this.props.onSubmit)}>
+        <form onSubmit={handleSubmit(this.props.onNewsSubmit)}>
           <div className={classes.formActionWrapper}>
             <Button
               className={classes.actionButtons}
@@ -151,27 +196,14 @@ function validate(values) {
   //subject
   if (!values.subject) {
     errors.subject = "Bir konu girmelisiniz";
-  } else if (values.title.length > 60) {
+  } else if (values.subject.length > 60) {
     errors.title = "Başlık 60 karakterden fazla olamaz!";
-  }
-
-  //body
-  if (!values.body) {
-    errors.body = "Mail içeriği girmelisiniz!";
-  } else if (values.body.length > 10000) {
-    errors.body = "Mail içeriği 10000 karakterden fazla olamaz!";
   }
 
   //from
   errors.from = validateEmails(values.from || "");
   if (!values.from) {
     errors.from = "Kimden kısmı boş olamaz!";
-  }
-
-  //Choices
-
-  if (!values.choices) {
-    errors.choices = "Alıcı girmelisiniz!";
   }
 
   //Recipients
@@ -185,7 +217,7 @@ function validate(values) {
 
 export default reduxForm({
   validate: validate,
-  form: "surveyForm",
+  form: "newsletterForm",
   enableReinitialize: true,
   destroyOnUnmount: false,
-})(withStyles(styles)(FormSurvey));
+})(withStyles(styles)(FormNewsletter));

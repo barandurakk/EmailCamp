@@ -1,5 +1,13 @@
 import axios from "axios";
-import { FETCH_USER, SUBMIT_SURVEY, FETCH_SURVEYS, SELECT_SURVEY } from "./types";
+import {
+  FETCH_USER,
+  SUBMIT_SURVEY,
+  FETCH_SURVEYS,
+  SELECT_SURVEY,
+  SUBMIT_NEWSLETTER,
+  FETCH_NEWSLETTERS,
+  SELECT_NEWSLETTER,
+} from "./types";
 
 export const fetchUser = () => async (dispatch) => {
   const res = await axios.get("/api/currentUser");
@@ -25,6 +33,8 @@ export const uploadImage = (file) => async (dispatch) => {
   dispatch({ type: FETCH_USER, payload: res.data });
 };
 
+//--SURVEYS
+
 export const submitSurvey = (values, history) => async (dispatch) => {
   const res = await axios.post("/api/surveys", values);
 
@@ -39,5 +49,24 @@ export const fetchSurveys = () => async (dispatch) => {
 };
 
 export const fetchASurvey = (id) => (dispatch) => {
-  dispatch({ type: SELECT_SURVEY, payload: id });
+  dispatch({ type: SELECT_SURVEY, payload: id }); //spesific fetch route is exist but for now we do it in reducers
+};
+
+//---NEWSLETTER
+
+export const submitNewsletter = (values, history) => async (dispatch) => {
+  const res = await axios.post("/api/newsletter", values);
+
+  history.push("/panel");
+  dispatch({ type: SUBMIT_NEWSLETTER, payload: res.data });
+};
+
+export const fetchNewsletters = () => async (dispatch) => {
+  const res = await axios.get("/api/newsletter");
+
+  dispatch({ type: FETCH_NEWSLETTERS, payload: res.data });
+};
+
+export const fetchANewsletter = (id) => (dispatch) => {
+  dispatch({ type: SELECT_NEWSLETTER, payload: id });
 };

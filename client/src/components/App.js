@@ -10,6 +10,7 @@ import NewSurvey from "./Survey/NewSurvey.js";
 
 //actions
 import { fetchUser } from "../actions/index";
+import NewNewsletter from "./Newsletter/NewNewsletter";
 
 class App extends Component {
   componentDidMount() {
@@ -25,7 +26,8 @@ class App extends Component {
           <Switch>
             <Route exact path="/" component={Landing} />
             <Route exact path="/panel" component={Dashboard} />
-            <Route exact path="/panel/yeni" component={NewSurvey} />
+            <Route exact path="/panel/anket/yeni" component={NewSurvey} />
+            <Route exact path="/panel/newsletter/yeni" component={NewNewsletter} />
             <Route exact path="/profile" component={UserProfile} />
           </Switch>
         </div>
