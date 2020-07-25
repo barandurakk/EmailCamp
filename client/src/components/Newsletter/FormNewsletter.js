@@ -6,13 +6,17 @@ import FieldNewsletter from "./FieldNewsletter";
 import validateEmails from "../../utils/validateEmails";
 
 import CSVReader from "react-csv-reader";
-import TextEditor from "./TextEditor";
+import TextEditor from "../TextEditor";
 
 //material ui
 import withStyles from "@material-ui/styles/withStyles";
 import { Button, TextField, Typography } from "@material-ui/core";
 
 const styles = {
+  formNewsContainer: {
+    width: "70%",
+    margin: "auto",
+  },
   formActionWrapper: {
     position: "relative",
     width: "100%",
@@ -152,7 +156,7 @@ class FormNewsletter extends React.Component {
     const { classes, handleSubmit } = this.props;
 
     return (
-      <div>
+      <div className={classes.formNewsContainer}>
         <form onSubmit={handleSubmit(this.props.onNewsSubmit)}>
           <div className={classes.formActionWrapper}>
             <Button

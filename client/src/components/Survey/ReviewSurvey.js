@@ -3,13 +3,17 @@ import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
 
 //action
-import { submitSurvey } from "../../actions/index";
+import { submitSurvey, draftSurvey } from "../../actions/index";
 
 //metarial-ui
 import withStyles from "@material-ui/styles/withStyles";
-import { Typography, Button } from "@material-ui/core";
+import { Typography, Button, Card, Divider, CardContent } from "@material-ui/core";
 
 const styles = {
+  reviewSurveyContainer: {
+    width: "70%",
+    margin: "auto",
+  },
   previewDiv: {
     marginTop: 25,
     marginBottom: 25,
@@ -32,12 +36,9 @@ const styles = {
 
 class ReviewSurvey extends React.Component {
   render() {
-    const { surveyFormValues, submitSurvey, history, classes } = this.props;
+    const { surveyFormValues, submitSurvey, draftSurvey, history, classes } = this.props;
     return (
-      <div>
-        <Typography variant="h4" color="primary">
-          Email'inizi inceleyebilirsiniz
-        </Typography>
+      <div className={classes.reviewSurveyContainer}>
         <div className={classes.formActionWrapper}>
           <Button
             className={classes.actionButtons}
@@ -51,30 +52,65 @@ class ReviewSurvey extends React.Component {
             className={classes.actionButtons}
             type="submit"
             variant="contained"
+            color="#c20f2f"
+            onClick={() => draftSurvey(surveyFormValues, history)}
+          >
+            Taslak Olarak Kaydet
+          </Button>
+          <Button
+            className={classes.actionButtons}
+            type="submit"
+            variant="contained"
             color="primary"
             onClick={() => submitSurvey(surveyFormValues, history)}
           >
             Gönder
           </Button>
         </div>
-        <div>
-          <div>
-            <label>Anket Başlığı</label>
-            <div>{surveyFormValues.title}</div>
-          </div>
-          <div>
-            <label>Konu</label>
-            <div>{surveyFormValues.subject}</div>
-          </div>
-          <div>
-            <label>Email İçeriği</label>
-            <div>{surveyFormValues.body}</div>
-          </div>
-          <div>
-            <label>Alıcı Listesi</label>
-            <div>{surveyFormValues.recipients}</div>
-          </div>
-        </div>
+        <Typography variant="h5" color="primary">
+          Email'inizi inceleyebilirsiniz
+        </Typography>
+
+        <Card>
+          <CardContent>
+            <div>
+              <Typography gutterBottom variant="body1" component="h2">
+                Anket Başlığı
+              </Typography>
+              <Typography gutterBottom variant="h5" component="h2">
+                {surveyFormValues.title}
+              </Typography>
+              <Divider />
+            </div>
+            <div>
+              <Typography gutterBottom variant="body1" component="h2">
+                Konu
+              </Typography>
+              <Typography gutterBottom variant="h5" component="h2">
+                {surveyFormValues.subject}
+              </Typography>
+              <Divider />
+            </div>
+            <div>
+              <Typography gutterBottom variant="body1" component="h2">
+                Email Gövdesi
+              </Typography>
+              <div
+                dangerouslySetInnerHTML={{ __html: surveyFormValues.body }}
+                className={classes.previewDiv}
+              />
+            </div>
+            <div>
+              <Typography gutterBottom variant="body1" component="h2">
+                Alıcılar
+              </Typography>
+              <Typography gutterBottom variant="body2" component="h2">
+                {surveyFormValues.recipients}
+              </Typography>
+              <Divider />
+            </div>
+          </CardContent>
+        </Card>
       </div>
     );
   }
@@ -86,6 +122,6 @@ const mapStateToProps = (state) => {
   };
 };
 
-export default connect(mapStateToProps, { submitSurvey })(
+export default connect(mapStateToProps, { submitSurvey, draftSurvey })(
   withRouter(withStyles(styles)(ReviewSurvey))
 );

@@ -14,6 +14,7 @@ const surveySchema = new Schema({
   _user: { type: Schema.Types.ObjectId, ref: "User" }, //user relationship
   dateSent: Date,
   lastResponded: Date,
+  drafted: { type: Boolean, default: false },
 });
 
 mongoose.model("surveys", surveySchema);

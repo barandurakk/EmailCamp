@@ -36,7 +36,23 @@ export const uploadImage = (file) => async (dispatch) => {
 //--SURVEYS
 
 export const submitSurvey = (values, history) => async (dispatch) => {
-  const res = await axios.post("/api/surveys", values);
+  const formValues = {
+    ...values,
+    drafted: false,
+  };
+
+  const res = await axios.post("/api/surveys", formValues);
+
+  history.push("/panel");
+  dispatch({ type: SUBMIT_SURVEY, payload: res.data });
+};
+
+export const draftSurvey = (values, history) => async (dispatch) => {
+  const formValues = {
+    ...values,
+    drafted: true,
+  };
+  const res = await axios.post("/api/surveys", formValues);
 
   history.push("/panel");
   dispatch({ type: SUBMIT_SURVEY, payload: res.data });

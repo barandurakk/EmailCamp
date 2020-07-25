@@ -28,7 +28,7 @@ const style = {
     left: "0px",
     overflowY: "scroll",
     backgroundColor: "#213E5B",
-    height: "100vw",
+    bottom: "0px",
   },
   listPaper: {
     marginTop: 15,
@@ -88,7 +88,7 @@ class Dashboard extends React.Component {
                 color="primary"
                 className={classes.newSurveyButton}
               >
-                Newsletter Oluştur
+                E-bülten Oluştur
               </Button>
             </div>
 
@@ -117,7 +117,7 @@ class Dashboard extends React.Component {
                 }
                 onClick={() => this.setState({ showSurveyList: false })}
               >
-                Newsletter'lar
+                E-BÜLTEN
               </Button>
             </div>
 

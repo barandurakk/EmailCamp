@@ -6,12 +6,17 @@ import SurveyField from "./SurveyField";
 import validateEmails from "../../utils/validateEmails";
 
 import CSVReader from "react-csv-reader";
+import TextEditor from "../TextEditor";
 
 //material ui
 import withStyles from "@material-ui/styles/withStyles";
 import { Button } from "@material-ui/core";
 
 const styles = {
+  formSurveyContainer: {
+    width: "70%",
+    margin: "auto",
+  },
   formActionWrapper: {
     position: "relative",
     width: "100%",
@@ -46,6 +51,10 @@ class FormSurvey extends React.Component {
     this.props.change("recipients", recipientTempString);
   }
 
+  handleBodyValue = (editorValue) => {
+    this.props.change("body", editorValue);
+  };
+
   renderFields() {
     return (
       <div>
@@ -73,14 +82,8 @@ class FormSurvey extends React.Component {
           variant="outlined"
           multiline={false}
         />
-        <Field
-          type="text"
-          name="body"
-          label="Email İçeriği"
-          component={SurveyField}
-          multiline={true}
-          variant="outlined"
-        />
+        <Field type="text" name="body" label="Email İçeriği" component={SurveyField} />
+        <TextEditor editorValue={this.handleBodyValue} />
 
         <Field
           type="text"
@@ -107,7 +110,7 @@ class FormSurvey extends React.Component {
   render() {
     const { classes } = this.props;
     return (
-      <div>
+      <div className={classes.formSurveyContainer}>
         <form onSubmit={this.props.handleSubmit(this.props.onSubmit)}>
           <div className={classes.formActionWrapper}>
             <Button

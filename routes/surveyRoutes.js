@@ -74,7 +74,7 @@ module.exports = (app) => {
 
   //post Survey to sendgrid and save survey to database
   app.post("/api/surveys", requireLogin, requireCredits, async (req, res) => {
-    const { title, subject, body, recipients, from, choices } = req.body;
+    const { title, subject, body, recipients, from, choices, drafted } = req.body;
 
     console.log(from);
 
@@ -87,6 +87,7 @@ module.exports = (app) => {
       choices: choices.split(",").map((choice) => ({ answer: choice })),
       _user: req.user.id,
       dateSent: Date.now(),
+      drafted,
     });
 
     //Send Email

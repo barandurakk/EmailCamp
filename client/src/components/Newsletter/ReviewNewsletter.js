@@ -7,15 +7,30 @@ import { submitNewsletter } from "../../actions/index";
 
 //metarial-ui
 import withStyles from "@material-ui/styles/withStyles";
-import { Typography, Button } from "@material-ui/core";
+import { Typography, Button, Card, CardContent, Divider } from "@material-ui/core";
 
 const styles = {
+  reviewNewsContainer: {
+    width: "70%",
+    margin: "auto",
+  },
   previewDiv: {
     marginTop: 25,
     marginBottom: 25,
     border: "solid 2px #213e5b",
     maxHeight: "400px",
     overflowY: "scroll",
+  },
+  formActionWrapper: {
+    position: "relative",
+    width: "100%",
+    top: "0px",
+    height: "50px",
+    backgroundColor: "#80d8ff",
+    display: "flex",
+    alignContent: "middle",
+    justifyContent: "space-between",
+    marginTop: 25,
   },
 };
 
@@ -24,10 +39,7 @@ class ReviewNewsletter extends React.Component {
     const { newsFormValues, submitNewsletter, history, classes } = this.props;
     console.log(newsFormValues);
     return (
-      <div>
-        <Typography variant="h4" color="primary">
-          Email'inizi inceleyebilirsiniz
-        </Typography>
+      <div className={classes.reviewNewsContainer}>
         <div className={classes.formActionWrapper}>
           <Button
             className={classes.actionButtons}
@@ -47,26 +59,50 @@ class ReviewNewsletter extends React.Component {
             Gönder
           </Button>
         </div>
+        <Typography variant="h5" color="primary">
+          Email'inizi inceleyebilirsiniz
+        </Typography>
         <div>
-          <div>
-            <label>Anket Başlığı</label>
-            <div>{newsFormValues.title}</div>
-          </div>
-          <div>
-            <label>Konu</label>
-            <div>{newsFormValues.subject}</div>
-          </div>
-          <div>
-            <label>Email İçeriği</label>
-            <div
-              dangerouslySetInnerHTML={{ __html: newsFormValues.body }}
-              className={classes.previewDiv}
-            />
-          </div>
-          <div>
-            <label>Alıcı Listesi</label>
-            <div>{newsFormValues.recipients}</div>
-          </div>
+          <Card>
+            <CardContent>
+              <div>
+                <Typography gutterBottom variant="body1" component="h2">
+                  Newsletter Başlığı
+                </Typography>
+                <Typography gutterBottom variant="h5" component="h2">
+                  {newsFormValues.title}
+                </Typography>
+                <Divider />
+              </div>
+              <div>
+                <Typography gutterBottom variant="body1" component="h2">
+                  Konu
+                </Typography>
+                <Typography gutterBottom variant="h5" component="h2">
+                  {newsFormValues.subject}
+                </Typography>
+                <Divider />
+              </div>
+              <div>
+                <Typography gutterBottom variant="body1" component="h2">
+                  Email Gövdesi
+                </Typography>
+                <div
+                  dangerouslySetInnerHTML={{ __html: newsFormValues.body }}
+                  className={classes.previewDiv}
+                />
+              </div>
+              <div>
+                <Typography gutterBottom variant="body1" component="h2">
+                  Alıcılar
+                </Typography>
+                <Typography gutterBottom variant="body2" component="h2">
+                  {newsFormValues.recipients}
+                </Typography>
+                <Divider />
+              </div>
+            </CardContent>
+          </Card>
         </div>
       </div>
     );
