@@ -12,7 +12,7 @@ module.exports = (survey) => {
                 ${survey.choices.map((choice) => {
                   return `
                     <div>
-                      <a href="${keys.redirectDomain}/api/surveys/${survey.id}/${choice.answer}">
+                      <a href="${keys.redirectDomain}/api/surveys/${survey.id}/${choice._id}">
                         ${choice.answer}
                       </a>
                     </div>

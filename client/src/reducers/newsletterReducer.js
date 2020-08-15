@@ -1,4 +1,4 @@
-import { FETCH_NEWSLETTERS, SELECT_NEWSLETTER } from "../actions/types";
+import { FETCH_NEWSLETTERS, SELECT_NEWSLETTER, DELETE_NEWSLETTER } from "../actions/types";
 
 const initialState = {
   newsletterList: [],
@@ -17,6 +17,16 @@ export default (state = initialState, action) => {
       return {
         ...state,
         newsletter: state.newsletterList.find((newsletter) => action.payload === newsletter._id),
+      };
+
+    case DELETE_NEWSLETTER:
+      let newsletterList = state.newsletterList.filter(
+        (newsletter) => newsletter._id !== action.payload
+      );
+
+      return {
+        newsletter: {},
+        newsletterList,
       };
 
     default:

@@ -1,6 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
+import sanitizeHtml from "../../utils/sanitizeHtml";
 
 //action
 import { submitNewsletter } from "../../actions/index";
@@ -38,6 +39,7 @@ class ReviewNewsletter extends React.Component {
   render() {
     const { newsFormValues, submitNewsletter, history, classes } = this.props;
     console.log(newsFormValues);
+
     return (
       <div className={classes.reviewNewsContainer}>
         <div className={classes.formActionWrapper}>
@@ -87,10 +89,7 @@ class ReviewNewsletter extends React.Component {
                 <Typography gutterBottom variant="body1" component="h2">
                   Email Gövdesi
                 </Typography>
-                <div
-                  dangerouslySetInnerHTML={{ __html: newsFormValues.body }}
-                  className={classes.previewDiv}
-                />
+                <div dangerouslySetInnerHTML={{ __html: sanitizeHtml(newsFormValues.body) }} />
               </div>
               <div>
                 <Typography gutterBottom variant="body1" component="h2">

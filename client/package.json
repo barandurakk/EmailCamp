@@ -11,7 +11,6 @@
     "axios": "^0.19.2",
     "draft-js": "^0.11.6",
     "draft-js-export-html": "^1.4.1",
-    "html-to-react": "^1.4.3",
     "http-proxy-middleware": "^0.21.0",
     "materialize-css": "^1.0.0-rc.2",
     "react": "^16.13.1",
@@ -25,7 +24,8 @@
     "react-stripe-checkout": "^2.6.3",
     "redux": "^4.0.5",
     "redux-form": "^8.3.6",
-    "redux-thunk": "^2.3.0"
+    "redux-thunk": "^2.3.0",
+    "sanitize-html": "^1.27.3"
   },
   "scripts": {
     "start": "react-scripts start",

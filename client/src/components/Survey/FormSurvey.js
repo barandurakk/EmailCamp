@@ -10,7 +10,7 @@ import TextEditor from "../TextEditor";
 
 //material ui
 import withStyles from "@material-ui/styles/withStyles";
-import { Button } from "@material-ui/core";
+import { Button, Typography } from "@material-ui/core";
 
 const styles = {
   formSurveyContainer: {
@@ -102,6 +102,9 @@ class FormSurvey extends React.Component {
           multiline={true}
           variant="outlined"
         />
+        <Typography variant="h6" color="primary">
+          .csv formatında alıcı listesi yükleyebilirsiniz.
+        </Typography>
         <CSVReader onFileLoaded={(data) => this.handleCsvFile(data)} />
       </div>
     );

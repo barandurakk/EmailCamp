@@ -1,6 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
+import sanitizeHtml from "../../utils/sanitizeHtml";
 
 //action
 import { submitSurvey, draftSurvey } from "../../actions/index";
@@ -96,7 +97,7 @@ class ReviewSurvey extends React.Component {
                 Email Gövdesi
               </Typography>
               <div
-                dangerouslySetInnerHTML={{ __html: surveyFormValues.body }}
+                dangerouslySetInnerHTML={{ __html: sanitizeHtml(surveyFormValues.body) }}
                 className={classes.previewDiv}
               />
             </div>

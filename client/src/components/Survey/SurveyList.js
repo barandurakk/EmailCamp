@@ -2,7 +2,7 @@ import React from "react";
 import { connect } from "react-redux";
 
 //action
-import { fetchSurveys, fetchASurvey } from "../../actions/index";
+import { fetchSurveys, fetchASurvey, deleteASurvey } from "../../actions/index";
 
 //metarial ui
 import { List, ListItem, Divider, Typography, IconButton, Tooltip } from "@material-ui/core";
@@ -31,6 +31,12 @@ const styles = {
     display: "flex",
     justifyContent: "space-between",
   },
+  actionWrapper: {
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    width: "100%",
+  },
 };
 
 class SurveyList extends React.Component {
@@ -40,6 +46,7 @@ class SurveyList extends React.Component {
     this.state = {
       limit: 9,
       sortReturn: 1,
+      open: true,
     };
   }
 
@@ -66,11 +73,13 @@ class SurveyList extends React.Component {
                 {survey.title}
               </Typography>
 
-              <Typography component="span" className={classes.listBody}>
-                Gönderilmiş: {new Date(survey.dateSent).toLocaleDateString()} <br />
-                Son Etkileşim:
-                {survey.lastResponded ? new Date(survey.lastResponded).toLocaleDateString() : "-"}
-              </Typography>
+              <div className={classes.actionWrapper}>
+                <Typography component="span" className={classes.listBody}>
+                  Gönderilmiş: {new Date(survey.dateSent).toLocaleDateString()} <br />
+                  Son Etkileşim:
+                  {survey.lastResponded ? new Date(survey.lastResponded).toLocaleDateString() : "-"}
+                </Typography>
+              </div>
             </ListItem>
             <Divider />
           </Fragment>
@@ -142,6 +151,6 @@ const mapStateToProps = (state) => {
   };
 };
 
-export default connect(mapStateToProps, { fetchSurveys, fetchASurvey })(
+export default connect(mapStateToProps, { fetchSurveys, fetchASurvey, deleteASurvey })(
   withStyles(styles)(SurveyList)
 );

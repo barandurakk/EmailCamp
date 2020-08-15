@@ -46,7 +46,7 @@ const styles = {
 class FormNewsletter extends React.Component {
   state = {
     showEditor: true,
-    editorContent: "",
+
     showPreview: false,
   };
 
@@ -147,6 +147,9 @@ class FormNewsletter extends React.Component {
           multiline={true}
           variant="outlined"
         />
+        <Typography variant="h6" color="primary">
+          .csv formatında alıcı listesi yükleyebilirsiniz.
+        </Typography>
         <CSVReader onFileLoaded={(data) => this.handleCsvFile(data)} />
       </div>
     );

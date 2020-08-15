@@ -1,4 +1,5 @@
 import axios from "axios";
+
 import {
   FETCH_USER,
   SUBMIT_SURVEY,
@@ -7,6 +8,8 @@ import {
   SUBMIT_NEWSLETTER,
   FETCH_NEWSLETTERS,
   SELECT_NEWSLETTER,
+  DELETE_SURVEY,
+  DELETE_NEWSLETTER,
 } from "./types";
 
 export const fetchUser = () => async (dispatch) => {
@@ -68,6 +71,13 @@ export const fetchASurvey = (id) => (dispatch) => {
   dispatch({ type: SELECT_SURVEY, payload: id }); //spesific fetch route is exist but for now we do it in reducers
 };
 
+//delete survey
+export const deleteASurvey = (id) => async (dispatch) => {
+  const res = await axios.get(`/api/surveys/${id}/delete`);
+
+  dispatch({ type: DELETE_SURVEY, payload: id });
+};
+
 //---NEWSLETTER
 
 export const submitNewsletter = (values, history) => async (dispatch) => {
@@ -85,4 +95,9 @@ export const fetchNewsletters = () => async (dispatch) => {
 
 export const fetchANewsletter = (id) => (dispatch) => {
   dispatch({ type: SELECT_NEWSLETTER, payload: id });
+};
+
+export const deleteANewsletter = (id) => async (dispatch) => {
+  const res = await axios.get(`/api/newsletter/${id}/delete`);
+  dispatch({ type: DELETE_NEWSLETTER, payload: id });
 };

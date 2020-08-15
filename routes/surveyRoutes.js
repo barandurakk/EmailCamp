@@ -19,7 +19,7 @@ module.exports = (app) => {
   //get a Survey
   app.get("/api/surveys/:surveyId", requireLogin, async (req, res) => {
     const survey = await Survey.find({ _user: req.user.id, _id: req.params.surveyId });
-    console.log(survey);
+
     if (survey) {
       res.send(survey);
     } else {
@@ -29,6 +29,20 @@ module.exports = (app) => {
     }
   });
 
+  //delete a Survey
+  app.get("/api/surveys/:surveyId/delete", requireLogin, async (req, res) => {
+    Survey.findOneAndDelete({
+      _user: req.user.id,
+      _id: req.params.surveyId,
+    }).then((result) => {
+      if (result) {
+        res.send({ message: "Anket başarıyla silindi." });
+      } else {
+        res.status(404).send({ error: "Varolmayan veya sizin olmayan bir anketi silemezsiniz!" });
+      }
+    });
+  });
+
   //Thank you screen
   app.get("/api/surveys/:surveyId/:answer", (req, res) => {
     res.send("Geri dönüşünüz için teşekkürler!");
@@ -36,39 +50,57 @@ module.exports = (app) => {
 
   //answer handle
   app.post("/api/surveys/webhooks", (req, res) => {
-    const p = new Path("/api/surveys/:surveyId/:answer"); //path-parser kütüphanesi ile path name'i koddaki layout ile extract ediyoruz
+    console.log("---START of HOOK--");
+
+    const p = new Path("/api/surveys/:surveyId/:answerId"); //path-parser kütüphanesi ile path name'i koddaki layout ile extract ediyoruz
 
     _.chain(req.body)
       .map((event) => {
         const pathname = new URL(event.url).pathname; //gelen url'in pathname'i
         const eventObject = p.test(pathname);
+
         if (eventObject) {
-          return { email: event.email, surveyId: eventObject.surveyId, answer: eventObject.answer };
+          return {
+            email: event.email,
+            surveyId: eventObject.surveyId,
+            answerId: eventObject.answerId,
+          };
         }
       })
       .compact() //lodash undefined olan eventleri siliyor.
-      .uniqBy("email", "surveyId") //lodash email ve survey Id aynı olan elemenleri siliyor.
-      .each((event) => {
+      .uniqBy("email", "surveyId") //lodash email ve survey Id aynı olan elementleri siliyor.
+      .each(async (event) => {
         Survey.updateOne(
-          //database güncelliyoruz
           {
             _id: event.surveyId,
+
             recipients: {
               $elemMatch: { email: event.email, responded: false },
             },
-            choices: {
-              $elemMatch: { answer: event.answer },
-            },
           },
           {
-            $inc: { "choices.$.amount": 1 },
             $set: { "recipients.$.responded": true },
             lastResponded: new Date(),
           }
-        ).exec();
+        )
+          .exec()
+          .then((result) => {
+            const { nModified } = result;
+            if (nModified >= 1) {
+              Survey.updateOne(
+                {
+                  _id: event.surveyId,
+                  "choices._id": event.answerId,
+                },
+                {
+                  $inc: { "choices.$.amount": 1 },
+                }
+              ).exec();
+            }
+          });
       })
       .value();
-
+    console.log("---END of HOOK--");
     res.send({});
   });
 
