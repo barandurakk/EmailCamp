@@ -117,7 +117,7 @@ class Dashboard extends React.Component {
                 }
                 onClick={() => this.setState({ showSurveyList: false })}
               >
-                E-BÜLTEN
+                E-BÜLTENLER
               </Button>
             </div>
 

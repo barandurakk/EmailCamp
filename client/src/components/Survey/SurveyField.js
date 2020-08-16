@@ -16,7 +16,7 @@ class SurveyField extends React.Component {
 
     if (input.name === "body") {
       return (
-        <div style={{ marginBottom: 25, marginTop: 25, display: "none" }}>
+        <div style={{ marginBottom: 25, marginTop: 25 }}>
           <TextField
             fullWidth
             {...input}

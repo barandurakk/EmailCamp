@@ -6,6 +6,7 @@ const requireLogin = require("../middlewares/requireLogin");
 const requireCredits = require("../middlewares/requireCredits");
 const Mailer = require("../services/Mailer");
 const surveyTemplate = require("../services/emailTemplates/twoOptionSurveyTemplate");
+const { result } = require("lodash");
 
 const Survey = mongoose.model("surveys");
 
@@ -107,33 +108,123 @@ module.exports = (app) => {
   //post Survey to sendgrid and save survey to database
   app.post("/api/surveys", requireLogin, requireCredits, async (req, res) => {
     const { title, subject, body, recipients, from, choices, drafted } = req.body;
+    console.log(req.body);
+    if (drafted) {
+      //if drafted is true save the database but do not send email
 
-    console.log(from);
+      const survey = new Survey({
+        title,
+        subject,
+        from,
+        body,
+        recipients: recipients.split(",").map((email) => ({ email: email.trim() })),
+        choices: choices.split(",").map((choice) => ({ answer: choice })),
+        _user: req.user.id,
+        dateSent: Date.now(),
+        drafted,
+      });
 
-    const survey = new Survey({
-      title,
-      subject,
-      from,
-      body,
-      recipients: recipients.split(",").map((email) => ({ email: email.trim() })),
-      choices: choices.split(",").map((choice) => ({ answer: choice })),
-      _user: req.user.id,
-      dateSent: Date.now(),
-      drafted,
-    });
+      try {
+        await survey.save();
+        const user = await req.user.save();
 
-    //Send Email
-    const mailer = new Mailer(survey, surveyTemplate(survey));
+        res.send(user);
+      } catch (err) {
+        res.status(422).send(err);
+      }
+    } else {
+      //if drafted is false save database and send email
 
-    try {
-      await mailer.send();
-      await survey.save();
-      req.user.credits -= 1;
-      const user = await req.user.save();
+      const survey = new Survey({
+        title,
+        subject,
+        from,
+        body,
+        recipients: recipients.split(",").map((email) => ({ email: email.trim() })),
+        choices: choices.split(",").map((choice) => ({ answer: choice })),
+        _user: req.user.id,
+        dateSent: Date.now(),
+        drafted,
+      });
 
-      res.send(user);
-    } catch (err) {
-      res.status(422).send(err);
+      //Send Email
+      const mailer = new Mailer(survey, surveyTemplate(survey));
+
+      try {
+        await mailer.send();
+        await survey.save();
+        req.user.credits -= 1;
+        const user = await req.user.save();
+
+        res.send(user);
+      } catch (err) {
+        res.status(422).send(err);
+      }
+    }
+  });
+
+  //update or send drafted surveys
+  app.post("/api/surveys/:surveyId/update", requireLogin, requireCredits, async (req, res) => {
+    const { title, subject, body, recipients, from, choices, drafted } = req.body;
+    const { surveyId } = req.params;
+
+    if (drafted) {
+      //if drafted is true just update the survey
+
+      Survey.findOneAndUpdate(
+        {
+          _id: surveyId,
+          _user: req.user.id,
+        },
+        {
+          title,
+          subject,
+          body,
+          recipients,
+          from,
+          choices,
+          drafted,
+        }
+      )
+        .then(async (result) => {
+          const user = await req.user.save();
+          res.status(200).send(user);
+        })
+        .catch((err) => {
+          res.status(404).send({ error: "Bu anket sizin değil veya hiç olmamış!" });
+        });
+    } else {
+      //if drafted is false update the survey and send email
+
+      Survey.findOneAndUpdate(
+        {
+          _id: surveyId,
+          _user: req.user.id,
+        },
+        {
+          title,
+          subject,
+          body,
+          recipients,
+          from,
+          choices,
+          drafted,
+          dateSent: Date.now(),
+        },
+        { new: true }
+      )
+        .then(async (result) => {
+          //Send Email
+          const mailer = new Mailer(result, surveyTemplate(result));
+
+          const user = await req.user.save();
+          await mailer.send();
+          req.user.credits -= 1;
+          res.status(200).send(user);
+        })
+        .catch((err) => {
+          res.status(404).send({ error: "Bu anket sizin değil veya hiç olmamış!" });
+        });
     }
   });
 };

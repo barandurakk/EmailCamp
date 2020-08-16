@@ -15,6 +15,7 @@ class NewSurvey extends React.Component {
   }
 
   render() {
+    console.log(this.props.form);
     return (
       <div>
         {this.state.showFormReview ? (

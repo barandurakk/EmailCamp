@@ -10,6 +10,7 @@ import {
   SELECT_NEWSLETTER,
   DELETE_SURVEY,
   DELETE_NEWSLETTER,
+  DRAFT_SURVEY,
 } from "./types";
 
 export const fetchUser = () => async (dispatch) => {
@@ -55,10 +56,11 @@ export const draftSurvey = (values, history) => async (dispatch) => {
     ...values,
     drafted: true,
   };
+  console.log(formValues);
   const res = await axios.post("/api/surveys", formValues);
 
   history.push("/panel");
-  dispatch({ type: SUBMIT_SURVEY, payload: res.data });
+  dispatch({ type: DRAFT_SURVEY, payload: res.data });
 };
 
 export const fetchSurveys = () => async (dispatch) => {
@@ -67,8 +69,9 @@ export const fetchSurveys = () => async (dispatch) => {
   dispatch({ type: FETCH_SURVEYS, payload: res.data });
 };
 
-export const fetchASurvey = (id) => (dispatch) => {
-  dispatch({ type: SELECT_SURVEY, payload: id }); //spesific fetch route is exist but for now we do it in reducers
+export const fetchASurvey = (id) => async (dispatch) => {
+  const res = await axios.get(`/api/surveys/${id}`);
+  dispatch({ type: SELECT_SURVEY, payload: res.data }); //spesific fetch route is exist but for now we do it in reducers
 };
 
 //delete survey

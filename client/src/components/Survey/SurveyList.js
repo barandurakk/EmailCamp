@@ -37,6 +37,10 @@ const styles = {
     justifyContent: "space-between",
     width: "100%",
   },
+  draftedText: {
+    fontWeight: "500",
+    color: "#80d8ff",
+  },
 };
 
 class SurveyList extends React.Component {
@@ -50,9 +54,11 @@ class SurveyList extends React.Component {
     };
   }
 
-  handleClick = (id) => {
+  handleDetailButton = (id) => {
     this.props.fetchASurvey(id);
   };
+
+  handleEditDraftedButton = (id) => {};
 
   renderSurveyList() {
     const { surveys, classes } = this.props;
@@ -61,29 +67,62 @@ class SurveyList extends React.Component {
       .sort((a, b) => (a.dateSent > b.dateSent ? -this.state.sortReturn : this.state.sortReturn))
       .slice(this.state.limit - 9, this.state.limit)
       .map((survey) => {
-        return (
-          <Fragment key={survey._id}>
-            <ListItem
-              button
-              alignItems="flex-start"
-              className={classes.listItemWrapper}
-              onClick={() => this.handleClick(survey._id)}
-            >
-              <Typography component="span" variant="h6" className={classes.listTitle}>
-                {survey.title}
-              </Typography>
-
-              <div className={classes.actionWrapper}>
-                <Typography component="span" className={classes.listBody}>
-                  Gönderilmiş: {new Date(survey.dateSent).toLocaleDateString()} <br />
-                  Son Etkileşim:
-                  {survey.lastResponded ? new Date(survey.lastResponded).toLocaleDateString() : "-"}
+        if (survey.drafted) {
+          return (
+            <Fragment key={survey._id}>
+              <ListItem
+                button
+                alignItems="flex-start"
+                className={classes.listItemWrapper}
+                onClick={() => this.handleDetailButton(survey._id)}
+              >
+                <Typography component="span" variant="h6" className={classes.listTitle}>
+                  {survey.title}
                 </Typography>
-              </div>
-            </ListItem>
-            <Divider />
-          </Fragment>
-        );
+
+                <div className={classes.actionWrapper}>
+                  <Typography component="span" className={classes.listBody}>
+                    Kaydedilme Tarihi: {new Date(survey.dateSent).toLocaleDateString()} <br />
+                    Son Etkileşim:
+                    {survey.lastResponded
+                      ? new Date(survey.lastResponded).toLocaleDateString()
+                      : "-"}
+                  </Typography>
+                  <Typography component="span" className={classes.draftedText}>
+                    TASLAK
+                  </Typography>
+                </div>
+              </ListItem>
+              <Divider />
+            </Fragment>
+          );
+        } else {
+          return (
+            <Fragment key={survey._id}>
+              <ListItem
+                button
+                alignItems="flex-start"
+                className={classes.listItemWrapper}
+                onClick={() => this.handleDetailButton(survey._id)}
+              >
+                <Typography component="span" variant="h6" className={classes.listTitle}>
+                  {survey.title}
+                </Typography>
+
+                <div className={classes.actionWrapper}>
+                  <Typography component="span" className={classes.listBody}>
+                    Gönderilmiş: {new Date(survey.dateSent).toLocaleDateString()} <br />
+                    Son Etkileşim:
+                    {survey.lastResponded
+                      ? new Date(survey.lastResponded).toLocaleDateString()
+                      : "-"}
+                  </Typography>
+                </div>
+              </ListItem>
+              <Divider />
+            </Fragment>
+          );
+        }
       });
   }
 

@@ -8,3 +8,4 @@ export const FETCH_NEWSLETTERS = "fetch_newsletters";
 export const SELECT_NEWSLETTER = "select_newsletter";
 export const DELETE_SURVEY = "delete_survey";
 export const DELETE_NEWSLETTER = "delete_newsletter";
+export const DRAFT_SURVEY = "draft_survey";

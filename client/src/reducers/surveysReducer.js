@@ -1,4 +1,4 @@
-import { FETCH_SURVEYS, SELECT_SURVEY, DELETE_SURVEY } from "../actions/types";
+import { FETCH_SURVEYS, SELECT_SURVEY, DELETE_SURVEY, DRAFT_SURVEY } from "../actions/types";
 
 const initialState = {
   surveyList: [],
@@ -14,11 +14,9 @@ export default (state = initialState, action) => {
       };
 
     case SELECT_SURVEY:
-      let survey = state.surveyList.filter((survey) => survey._id === action.payload);
-
       return {
         ...state,
-        survey: survey,
+        survey: action.payload,
       };
 
     case DELETE_SURVEY:

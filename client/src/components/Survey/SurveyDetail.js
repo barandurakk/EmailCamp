@@ -5,6 +5,9 @@ import sanitizeHtml from "../../utils/sanitizeHtml";
 //actions
 import { deleteASurvey } from "../../actions/index";
 
+//component
+import UpdateSurvey from "./UpdateSurvey/UpdateSurvey";
+
 //metarial ui
 import withStyles from "@material-ui/styles/withStyles";
 import {
@@ -24,6 +27,7 @@ import {
 
 //icons
 import DeleteIcon from "@material-ui/icons/Delete";
+import EditIcon from "@material-ui/icons/Edit";
 
 const styles = {
   deleteIcon: {
@@ -32,40 +36,46 @@ const styles = {
   deleteButton: {
     float: "right",
   },
+  editButton: {
+    float: "right",
+  },
+  UpdateDialogContainer: {
+    maxWidth: 1200,
+  },
 };
 
 class SurveyDetail extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      open: false,
+      openDelete: false,
+      openUpdate: false,
     };
   }
 
   handleDeleteButton = (id) => {
     this.props.deleteASurvey(id);
     this.setState({
-      open: false,
+      openDelete: false,
     });
   };
 
   handleDeletePopupOpen = () => {
     this.setState({
-      open: true,
+      openDelete: true,
     });
   };
 
   handleDeletePopupClose = () => {
     this.setState({
-      open: false,
+      openDelete: false,
     });
   };
 
   renderDeletePopup = (title, id) => {
-    const { open } = this.state;
-    console.log("inside popup render");
+    const { openDelete } = this.state;
     return (
-      <Dialog open={open} keepMounted onClose={this.handleDeletePopupClose}>
+      <Dialog open={openDelete} keepMounted onClose={this.handleDeletePopupClose}>
         <DialogTitle>{"Emin misin?"}</DialogTitle>
         <DialogContent>
           <Typography variant="h6" color="primary">
@@ -88,6 +98,34 @@ class SurveyDetail extends React.Component {
     );
   };
 
+  handleUpdatePopupOpen = () => {
+    this.setState({
+      openUpdate: true,
+    });
+  };
+
+  handleUpdatePopupClose = () => {
+    this.setState({
+      openUpdate: false,
+    });
+  };
+
+  renderUpdatePopup = () => {
+    const { openUpdate } = this.state;
+    console.log(openUpdate);
+    return (
+      <Dialog
+        open={openUpdate}
+        keepMounted
+        onClose={this.handleDeletePopupClose}
+        maxWidth={1200}
+        fullWidth={true}
+      >
+        <UpdateSurvey onCancel={() => this.setState({ openUpdate: false })} />
+      </Dialog>
+    );
+  };
+
   renderContent = (survey) => {
     const { classes } = this.props;
     return (
@@ -99,6 +137,7 @@ class SurveyDetail extends React.Component {
                 {survey.title}
               </Typography>
               <div dangerouslySetInnerHTML={{ __html: sanitizeHtml(survey.body) }} />
+
               <Tooltip title="Sil" className={classes.deleteButton}>
                 <IconButton
                   onClick={() => this.handleDeletePopupOpen()}
@@ -107,6 +146,17 @@ class SurveyDetail extends React.Component {
                   <DeleteIcon className={classes.deleteIcon} />
                 </IconButton>
               </Tooltip>
+              {survey.drafted ? (
+                <Tooltip
+                  title="Güncelle"
+                  className={classes.editButton}
+                  onClick={() => this.handleUpdatePopupOpen()}
+                >
+                  <IconButton>
+                    <EditIcon className={classes.editIcon} />
+                  </IconButton>
+                </Tooltip>
+              ) : null}
             </CardContent>
           </CardActionArea>
           <CardActions>
@@ -120,12 +170,14 @@ class SurveyDetail extends React.Component {
           </CardActions>
         </Card>
         {this.renderDeletePopup(survey.title, survey._id)}
+        {this.renderUpdatePopup()}
       </Fragment>
     );
   };
 
   render() {
     const { survey } = this.props;
+
     const surveyItem = survey[0];
 
     return surveyItem ? this.renderContent(surveyItem) : <div>Seçim Yapınız</div>;
