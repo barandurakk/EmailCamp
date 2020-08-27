@@ -112,13 +112,13 @@ class SurveyDetail extends React.Component {
 
   renderUpdatePopup = () => {
     const { openUpdate } = this.state;
-    console.log(openUpdate);
+
     return (
       <Dialog
         open={openUpdate}
         keepMounted
         onClose={this.handleDeletePopupClose}
-        maxWidth={1200}
+        maxWidth="lg"
         fullWidth={true}
       >
         <UpdateSurvey onCancel={() => this.setState({ openUpdate: false })} />
@@ -131,38 +131,37 @@ class SurveyDetail extends React.Component {
     return (
       <Fragment>
         <Card>
-          <CardActionArea>
-            <CardContent>
-              <Typography gutterBottom variant="h5" component="h2">
-                {survey.title}
-              </Typography>
-              <div dangerouslySetInnerHTML={{ __html: sanitizeHtml(survey.body) }} />
+          <CardContent>
+            <Typography gutterBottom variant="h5" component="h2">
+              {survey.title}
+            </Typography>
+            <div dangerouslySetInnerHTML={{ __html: sanitizeHtml(survey.body) }} />
 
-              <Tooltip title="Sil" className={classes.deleteButton}>
-                <IconButton
-                  onClick={() => this.handleDeletePopupOpen()}
-                  className={classes.deleteIconWrapper}
-                >
-                  <DeleteIcon className={classes.deleteIcon} />
+            <Tooltip title="Sil" className={classes.deleteButton}>
+              <IconButton
+                onClick={() => this.handleDeletePopupOpen()}
+                className={classes.deleteIconWrapper}
+              >
+                <DeleteIcon className={classes.deleteIcon} />
+              </IconButton>
+            </Tooltip>
+            {survey.drafted ? (
+              <Tooltip
+                title="Güncelle"
+                className={classes.editButton}
+                onClick={() => this.handleUpdatePopupOpen()}
+              >
+                <IconButton>
+                  <EditIcon className={classes.editIcon} />
                 </IconButton>
               </Tooltip>
-              {survey.drafted ? (
-                <Tooltip
-                  title="Güncelle"
-                  className={classes.editButton}
-                  onClick={() => this.handleUpdatePopupOpen()}
-                >
-                  <IconButton>
-                    <EditIcon className={classes.editIcon} />
-                  </IconButton>
-                </Tooltip>
-              ) : null}
-            </CardContent>
-          </CardActionArea>
+            ) : null}
+          </CardContent>
+
           <CardActions>
             {survey.choices.map((choice) => {
               return (
-                <Button size="small" color="primary">
+                <Button size="small" color="primary" key={choice._id}>
                   {choice.answer}: {choice.amount}
                 </Button>
               );

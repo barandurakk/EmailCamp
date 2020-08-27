@@ -28,7 +28,7 @@ const style = {
     left: "0px",
     overflowY: "scroll",
     backgroundColor: "#213E5B",
-    bottom: "0px",
+    height: "100vh",
   },
   listPaper: {
     marginTop: 15,
@@ -100,8 +100,8 @@ class Dashboard extends React.Component {
             />
           </Toolbar>
         </AppBar>
-        <Grid container xs={12} spacing="50px">
-          <Grid item xs={4} className={classes.listSection}>
+        <Grid container item={true} xs={12} spacing={50}>
+          <Grid item={true} xs={4} className={classes.listSection}>
             <div className={classes.selectListWrapper}>
               <Button
                 className={
@@ -125,7 +125,7 @@ class Dashboard extends React.Component {
               {this.state.showSurveyList ? <SurveyList /> : <NewsletterList />}
             </Paper>
           </Grid>
-          <Grid item xs={8} className={classes.detailSection}>
+          <Grid item={true} xs={8} className={classes.detailSection}>
             <div className="fixed-action-btn">
               {this.state.showSurveyList ? <SurveyDetail /> : <NewsletterDetail />}
             </div>

@@ -180,9 +180,9 @@ module.exports = (app) => {
           title,
           subject,
           body,
-          recipients,
+          recipients: recipients.split(",").map((email) => ({ email: email.trim() })),
           from,
-          choices,
+          choices: choices.split(",").map((choice) => ({ answer: choice })),
           drafted,
         }
       )
@@ -205,9 +205,9 @@ module.exports = (app) => {
           title,
           subject,
           body,
-          recipients,
+          recipients: recipients.split(",").map((email) => ({ email: email.trim() })),
           from,
-          choices,
+          choices: choices.split(",").map((choice) => ({ answer: choice })),
           drafted,
           dateSent: Date.now(),
         },
@@ -217,9 +217,9 @@ module.exports = (app) => {
           //Send Email
           const mailer = new Mailer(result, surveyTemplate(result));
 
-          const user = await req.user.save();
           await mailer.send();
           req.user.credits -= 1;
+          const user = await req.user.save();
           res.status(200).send(user);
         })
         .catch((err) => {

@@ -116,6 +116,11 @@ class Header extends Component {
                 KREDİ YÜKLE
               </Typography>
             </Button>
+            <Button component={Link} to="/panel" variant="contained" color="primary">
+              <Typography variant="subtitle1" className={classes.displayName} color="textSecondary">
+                Panel
+              </Typography>
+            </Button>
             {this.renderCreditPopup()}
             <Button className={classes.profileButton} component={Link} to="/panel">
               <Avatar alt="profile-picture" src={auth.pictureUrl} />

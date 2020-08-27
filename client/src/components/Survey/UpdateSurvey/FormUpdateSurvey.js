@@ -34,6 +34,29 @@ const styles = {
 };
 
 class FormUpdateSurvey extends React.Component {
+  componentDidUpdate() {
+    const { initialValues } = this.props;
+    let choiceField = "";
+    let recipientsField = "";
+
+    initialValues.choices.map((choice, i) => {
+      if (i === initialValues.choices.length - 1) {
+        choiceField += `${choice.answer}`;
+      } else {
+        choiceField += `${choice.answer},`;
+      }
+    });
+    initialValues.recipients.map((recipient, i) => {
+      if (i === initialValues.recipients.length - 1) {
+        recipientsField += `${recipient.email}`;
+      } else {
+        recipientsField += `${recipient.email},`;
+      }
+    });
+    this.props.change("choices", choiceField);
+    this.props.change("recipients", recipientsField);
+  }
+
   handleCsvFile(data) {
     let recipientTempList = [];
     for (let x = 0; x < data.length; x++) {
@@ -115,7 +138,7 @@ class FormUpdateSurvey extends React.Component {
 
   render() {
     const { classes, initialValues } = this.props;
-    console.log(initialValues);
+
     return (
       <Fragment>
         {initialValues && initialValues.drafted === true ? (

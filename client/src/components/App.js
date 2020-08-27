@@ -1,5 +1,6 @@
 import React, { Component } from "react";
-import { BrowserRouter, Route, Switch } from "react-router-dom";
+import { BrowserRouter, Route, Switch, Router } from "react-router-dom";
+import createBrowserHistory from "history/createBrowserHistory";
 import { connect } from "react-redux";
 
 import Header from "./Header";
@@ -13,6 +14,8 @@ import UpdateSurvey from "./Survey/UpdateSurvey/UpdateSurvey";
 //actions
 import { fetchUser } from "../actions/index";
 
+export const history = createBrowserHistory();
+
 class App extends Component {
   componentDidMount() {
     this.props.fetchUser();
@@ -20,7 +23,7 @@ class App extends Component {
 
   render() {
     return (
-      <BrowserRouter>
+      <Router history={history}>
         <Header />
 
         <div className="container">
@@ -33,7 +36,7 @@ class App extends Component {
             <Route exact path="/profile" component={UserProfile} />
           </Switch>
         </div>
-      </BrowserRouter>
+      </Router>
     );
   }
 }

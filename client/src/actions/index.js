@@ -56,10 +56,18 @@ export const draftSurvey = (values, history) => async (dispatch) => {
     ...values,
     drafted: true,
   };
-  console.log(formValues);
+
   const res = await axios.post("/api/surveys", formValues);
 
   history.push("/panel");
+  dispatch({ type: DRAFT_SURVEY, payload: res.data });
+};
+
+export const updateSurvey = (values, history) => async (dispatch) => {
+  console.log("inside updateSurvey: ", values);
+  const res = await axios.post(`/api/surveys/${values._id}/update`, values);
+
+  window.location.reload();
   dispatch({ type: DRAFT_SURVEY, payload: res.data });
 };
 
