@@ -46,6 +46,11 @@ const style = {
     fontSize: 14,
     color: "#fff",
   },
+  EmailCampText: {
+    textDecoration: "none",
+    color: "#fff",
+    fontWeight: 600,
+  },
 };
 
 class Header extends Component {
@@ -144,7 +149,9 @@ class Header extends Component {
     return (
       <AppBar position="static" color="primary">
         <Toolbar className={classes.root}>
-          <Typography variant="h6">EmailCamp</Typography>
+          <Typography variant="h6" component={Link} to="/" className={classes.EmailCampText}>
+            EmailCamp
+          </Typography>
           {this.renderContent()}
         </Toolbar>
       </AppBar>

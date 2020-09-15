@@ -4,7 +4,12 @@ const Landing = () => {
   return (
     <div style={{ textAlign: "center" }}>
       <h1>EmailCamp!</h1>
-      Babanı pazara gönderdim ANANASALDIRDIM! (TİS İS A NOT SCAM)
+      <p>Kullanıcılarınıza anket düzenleyin, e-bülten oluşturun ve etkileşimi takip edin.</p>
+      <p>Send surveys to your users, prepare newsletters and track interactions.</p>
+      <br />
+      <br />
+      <h3>Hemen giriş yapıp ilk anketinizi oluşturun!</h3>
+      <h3>Sign in with google and start your first survey!</h3>
     </div>
   );
 };

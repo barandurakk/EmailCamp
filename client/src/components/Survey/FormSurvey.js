@@ -34,10 +34,6 @@ const styles = {
 };
 
 class FormSurvey extends React.Component {
-  constructor(props) {
-    super(props);
-  }
-
   handleCsvFile(data) {
     let recipientTempList = [];
     for (let x = 0; x < data.length; x++) {
@@ -151,8 +147,6 @@ class FormSurvey extends React.Component {
 function validate(values) {
   //redux-form validate
   const errors = {};
-
-  console.log(values);
 
   //title
   if (!values.title) {

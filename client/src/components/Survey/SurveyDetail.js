@@ -8,6 +8,9 @@ import { deleteASurvey } from "../../actions/index";
 //component
 import UpdateSurvey from "./UpdateSurvey/UpdateSurvey";
 
+//pie
+import { PieChart } from "react-minimal-pie-chart";
+
 //metarial ui
 import withStyles from "@material-ui/styles/withStyles";
 import {
@@ -41,6 +44,9 @@ const styles = {
   },
   UpdateDialogContainer: {
     maxWidth: 1200,
+  },
+  answerText: {
+    margin: "0px 10px 0px 10px",
   },
 };
 
@@ -128,6 +134,7 @@ class SurveyDetail extends React.Component {
 
   renderContent = (survey) => {
     const { classes } = this.props;
+
     return (
       <Fragment>
         <Card>
@@ -161,9 +168,9 @@ class SurveyDetail extends React.Component {
           <CardActions>
             {survey.choices.map((choice) => {
               return (
-                <Button size="small" color="primary" key={choice._id}>
-                  {choice.answer}: {choice.amount}
-                </Button>
+                <Typography variant="body1" className={classes.answerText}>
+                  <strong>{choice.answer}:</strong> {choice.amount}
+                </Typography>
               );
             })}
           </CardActions>
