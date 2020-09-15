@@ -191,8 +191,6 @@ function validate(values) {
   //redux-form validate
   const errors = {};
 
-  console.log(values);
-
   //title
   if (!values.title) {
     errors.title = "Bir başlık girmelisiniz!";

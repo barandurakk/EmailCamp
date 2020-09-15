@@ -15,7 +15,6 @@ class NewNewsletter extends React.Component {
   }
 
   render() {
-    console.log(this.state.showNewFormReview);
     return (
       <div>
         {this.state.showNewFormReview ? (

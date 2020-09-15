@@ -38,7 +38,6 @@ const styles = {
 class ReviewNewsletter extends React.Component {
   render() {
     const { newsFormValues, submitNewsletter, history, classes } = this.props;
-    console.log(newsFormValues);
 
     return (
       <div className={classes.reviewNewsContainer}>

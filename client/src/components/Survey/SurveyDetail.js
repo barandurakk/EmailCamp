@@ -8,14 +8,10 @@ import { deleteASurvey } from "../../actions/index";
 //component
 import UpdateSurvey from "./UpdateSurvey/UpdateSurvey";
 
-//pie
-import { PieChart } from "react-minimal-pie-chart";
-
 //metarial ui
 import withStyles from "@material-ui/styles/withStyles";
 import {
   Card,
-  CardActionArea,
   Typography,
   CardContent,
   Button,

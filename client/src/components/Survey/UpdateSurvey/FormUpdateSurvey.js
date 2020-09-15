@@ -2,8 +2,6 @@ import React, { Fragment } from "react";
 import { connect } from "react-redux";
 import { reduxForm, Field } from "redux-form";
 
-import validateEmails from "../../../utils/validateEmails";
-
 import CSVReader from "react-csv-reader";
 
 import SurveyField from "../SurveyField";

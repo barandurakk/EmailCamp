@@ -14,7 +14,7 @@ class TextEditor extends React.Component {
     this.setState({ editorState });
 
     const html = stateToHTML(editorState.getCurrentContent());
-    console.log(html);
+
     this.props.editorValue(html);
   };
 

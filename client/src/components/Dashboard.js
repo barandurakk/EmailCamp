@@ -10,7 +10,7 @@ import NewsletterDetail from "./Newsletter/NewsletterDetail";
 
 //metarial ui
 import withStyles from "@material-ui/core/styles/withStyles";
-import { Grid, AppBar, Toolbar, Paper, Button, Chip } from "@material-ui/core";
+import { Grid, AppBar, Toolbar, Paper, Button, Chip, Typography } from "@material-ui/core";
 import { Fragment } from "react";
 import MonetizationOnIcon from "@material-ui/icons/MonetizationOn";
 
@@ -91,6 +91,10 @@ class Dashboard extends React.Component {
                 E-bülten Oluştur
               </Button>
             </div>
+
+            <Typography variant="h6" color="primary">
+              1 kredi harcayarak anket veya e-bülten gönderebilirsiniz.
+            </Typography>
 
             <Chip
               className={classes.creditLabel}

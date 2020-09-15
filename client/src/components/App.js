@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { BrowserRouter, Route, Switch, Router } from "react-router-dom";
+import { Route, Switch, Router } from "react-router-dom";
 import createBrowserHistory from "history/createBrowserHistory";
 import { connect } from "react-redux";
 

@@ -6,7 +6,6 @@ import SurveyField from "./SurveyField";
 import validateEmails from "../../utils/validateEmails";
 
 import CSVReader from "react-csv-reader";
-import TextEditor from "../TextEditor";
 
 //material ui
 import withStyles from "@material-ui/styles/withStyles";

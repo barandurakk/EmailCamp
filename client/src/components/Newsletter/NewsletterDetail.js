@@ -14,7 +14,6 @@ import {
   Typography,
   CardContent,
   Button,
-  CardActions,
   Dialog,
   DialogActions,
   DialogContent,
@@ -118,7 +117,6 @@ class NewsletterDetail extends React.Component {
 
   render() {
     const { newsletter } = this.props;
-    console.log(_.isEmpty(newsletter));
 
     if (_.isEmpty(newsletter) || !newsletter) {
       return <div>Seçim Yapınız</div>;

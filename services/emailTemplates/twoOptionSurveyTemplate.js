@@ -23,13 +23,13 @@ module.exports = (survey) => {
      border-radius: 8px;
      transition: .2s ease-in-out;
      padding: 15px 30px;
- font-size: 14px;
- font-weight: 700;
- letter-spacing: 2px;
- text-transform: uppercase;
- text-decoration: none;
- text-align: center;
- margin: 1em;
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    text-decoration: none;
+    text-align: center;
+    margin: 1em;
      }
      .button:hover {
    border-radius: 30px;

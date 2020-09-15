@@ -1,4 +1,4 @@
-import { FETCH_SURVEYS, SELECT_SURVEY, DELETE_SURVEY, DRAFT_SURVEY } from "../actions/types";
+import { FETCH_SURVEYS, SELECT_SURVEY, DELETE_SURVEY } from "../actions/types";
 
 const initialState = {
   surveyList: [],
